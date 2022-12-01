@@ -98,6 +98,13 @@
     .checkbox a:hover {
         color: #85d6de;
     }
+    .spn-msg {
+        padding: 7px;
+        margin-top: 4px;
+        margin-bottom: 10px;
+        color: #0db10d;
+        font-size: 25px;
+    }
 
     .btn-item,
     button {
@@ -164,7 +171,9 @@
                 <a class="btn-item" href="#">Make Email</a>
             </div> -->
         </div>
+        
         <form id="formid" method="post" action="#">
+            <span style="display: none;" id="show-message" class="spn-msg"></span>
             <div class="title">
                 <i class="fas fa-pencil-alt"></i>
                 <h2>Book an Appointment</h2>
@@ -205,7 +214,7 @@
             <button id="submit-btn" type="submit" href="/">Submit</button>
         </form>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -228,7 +237,7 @@
             if (branch_id === "") {
                 return false;
             }
-            $.get("http://127.0.0.1:8000/api/get-counsellor-by-branch-for-appointment/" + branch_id, function(data, status) {
+            $.get("https://staging-api.theleadlibrary.com/api/get-counsellor-by-branch-for-appointment/" + branch_id, function(data, status) {
                 //console.log(data);
                 if (data['result']['key'] === 101) {
                     alert(data['result']['val']);
@@ -324,7 +333,7 @@
                     var formdata = JSON.stringify(dataval);
                     //alert(JSON.stringify(data));
                     //console.log(JSON.stringify(data));
-                    $.get("http://127.0.0.1:8000/api/book-appointment-submit/" + formdata, function(data, status) {
+                    $.get("https://staging-api.theleadlibrary.com/api/book-appointment-submit/" + formdata, function(data, status) {
                         console.log(data);
                         if (data['result']['key'] === 101) {
                             $('#submit-btn').prop('disabled', false);
@@ -333,6 +342,9 @@
                         if (data['result']['key'] === 200) {
                             $('#submit-btn').prop('disabled', false);
                             $("#formid")[0].reset();
+                            $("#show-message").show();
+                            $("#show-message").html(data['result']['val']);
+                            window.scrollTo(0, 0);
                         }
 
                     });
